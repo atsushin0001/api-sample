@@ -1,10 +1,12 @@
+import { StringDecoder } from "string_decoder";
+
 type Book = {
   id: string
-  volumeInfo: {
-    title: string
-    publisher: string
-    publishedDate: string
-  }
+  title: string
+  description: string
+  publisher: string
+  publishedDate: string
+  image: string
 }
 
 export default Book;

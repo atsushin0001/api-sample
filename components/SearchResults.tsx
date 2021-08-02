@@ -6,6 +6,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Image from 'next/image'
+import noImage from '../public/noImage.png'
 
 const SearchResults = ({ books }: { books: Book[] }) =>
   books.length > 0 ? (
@@ -13,7 +15,9 @@ const SearchResults = ({ books }: { books: Book[] }) =>
       <Table size="small" aria-label="a dense table">
         <TableHead>
           <TableRow style={{ backgroundColor: "#F2F2F2" }}>
-            <TableCell size="medium">title</TableCell>
+            <TableCell size="medium">image</TableCell>
+            <TableCell>title</TableCell>
+            {/* <TableCell>description</TableCell> */}
             <TableCell>publisher</TableCell>
             <TableCell>published Date</TableCell>
           </TableRow>
@@ -21,9 +25,29 @@ const SearchResults = ({ books }: { books: Book[] }) =>
         <TableBody>
           {books.map((book: Book) => (
             <TableRow key={book.id}>
-              <TableCell component="th" scope="row">{book.volumeInfo.title}</TableCell>
-              <TableCell>{book.volumeInfo.publisher}</TableCell>
-              <TableCell>{book.volumeInfo.publishedDate}</TableCell>
+              <TableCell>
+                {book.image.length > 0 ? 
+                  <Image
+                    src={book.image}
+                    alt="Picture of the book"
+                    layout={"responsive"}
+                    width={400}
+                    height={500}
+                  />
+                :
+                  <Image
+                    src={noImage}
+                    alt="Picture of the book"
+                    layout={"responsive"}
+                    width={400}
+                    height={500}
+                  />
+                }
+              </TableCell>
+              <TableCell>{book.title}</TableCell>
+              {/* <TableCell>{book.description}</TableCell> */}
+              <TableCell>{book.publisher}</TableCell>
+              <TableCell>{book.publishedDate}</TableCell>
             </TableRow>
           ))}
         </TableBody>

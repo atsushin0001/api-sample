@@ -9,10 +9,25 @@ import TextField from '@material-ui/core/TextField';
 const getBooks = async (keywords: string) => {
   const url = `https://www.googleapis.com/books/v1/volumes?q=${keywords}`;
   const {
-    data: { items },
+    data: {
+       items 
+      },
   } = await axios.get(url);
-  // console.log(items)
-  return items;
+
+  // 必要なものだけ抜き出してわかりやすいフォーマットに変更する
+  const itemsData = items.map(item => {
+    const vi = item.volumeInfo;
+    return {
+      title: vi.title,
+      description: vi.description,
+      publisher: vi.publisher,
+      publishedDate: vi.publishedDate,
+      image: vi.imageLinks ? vi.imageLinks.smallThumbnail : '',
+    }; 
+  });  
+  
+  console.log(itemsData)
+  return itemsData;
 };
 
 const BookSearch = () => {
