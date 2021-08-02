@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, ChangeEvent } from 'react';
 import Head from 'next/head'
 import axios from 'axios';
 import Book from '../models/Book'
@@ -18,7 +18,21 @@ const getBooks = async (keywords: string) => {
 const BookSearch = () => {
   const [keywords, setKeywords] = useState('');
   const [books, setBooks] = useState<Book[]>([]);
+  const inputRef = useRef(null);
+  const [inputError, setInputError] = useState(false);
 
+  const handleChange = (e) => {
+    if (inputRef.current) {
+      const ref = inputRef.current;
+      if (!ref.validity.valid) {
+        setInputError(true);
+      } else {
+        setInputError(false);
+      }
+    }
+    setKeywords(e.target.value)
+  };
+  
   return (
       <div>
         <Head>
@@ -32,7 +46,17 @@ const BookSearch = () => {
             setBooks(books);
           }}
         >
-          <TextField id="searchInput" label="title" variant="outlined" onChange={e => setKeywords(e.target.value)}/>
+          <TextField 
+            id="searchInput" 
+            label="title" 
+            variant="outlined" 
+            defaultValue=""
+            inputRef={inputRef}
+            error={inputError}
+            inputProps={{ required: true, maxLength: 20 }}
+            helperText={inputRef?.current?.validationMessage}
+            onChange={e => handleChange(e)}
+          />
           <br/><br/>
           <Button type="submit" variant="contained" color="primary">Search</Button>
         </form>
