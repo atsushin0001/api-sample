@@ -29,7 +29,7 @@ const SearchResults = ({ books }: { books: Book[] }) =>
                 {book.image.length > 0 ? 
                   <Image
                     src={book.image}
-                    alt="Picture of the book"
+                    alt="本の画像"
                     layout={"responsive"}
                     width={400}
                     height={500}
@@ -37,7 +37,7 @@ const SearchResults = ({ books }: { books: Book[] }) =>
                 :
                   <Image
                     src={noImage}
-                    alt="Picture of the book"
+                    alt="本の画像"
                     layout={"responsive"}
                     width={400}
                     height={500}
