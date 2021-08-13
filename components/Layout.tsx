@@ -4,7 +4,7 @@ type Props = {
 };
 
 const Layout = ({ title, children }: Props) => {
-  return <div className="layout">{children}</div>;
+  return <div>{children}</div>;
 };
 
 export default Layout;

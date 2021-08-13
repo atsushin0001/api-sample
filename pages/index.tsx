@@ -1,28 +1,41 @@
-import { useState, useRef, ChangeEvent } from 'react';
+import { useState, useRef, ChangeEvent, useEffect } from 'react';
 import Head from 'next/head'
 import axios from 'axios';
 import Book from '../models/Book'
 import SearchResults from "../components/SearchResults";
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import { parseISO, format } from 'date-fns'
+import Link from 'next/link'
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+  customButton: {
+    marginRight: "5px"
+  },
+}));
 
 const getBooks = async (keywords: string) => {
-  const url = `https://www.googleapis.com/books/v1/volumes?q=${keywords}`;
+  // const url = `https://www.googleapis.com/books/v1/volumes?q=${keywords}`;
+  const url = `https://localhost:44368/api/BookItems/${keywords}`;
   const {
-    data: {
-       items 
-      },
+    data
   } = await axios.get(url);
 
-  // 必要なものだけ抜き出してわかりやすいフォーマットに変更する
-  const itemsData = items.map(item => {
-    const vi = item.volumeInfo;
+  const itemsData = data.map(item => {
+    // const vi = item.volumeInfo;
     return {
-      title: vi.title,
-      description: vi.description,
-      publisher: vi.publisher,
-      publishedDate: vi.publishedDate,
-      image: vi.imageLinks ? vi.imageLinks.smallThumbnail : '',
+      id: item.id,
+      title: item.title,
+      description: item.description,
+      publisher: item.publisher,
+      publisheddate: parseISO(item.publisheddate),
+      image: item.image,
     }; 
   });  
   
@@ -30,7 +43,11 @@ const getBooks = async (keywords: string) => {
   return itemsData;
 };
 
+
+
 const BookSearch = () => {
+  const classes = useStyles();
+
   const [keywords, setKeywords] = useState('');
   const [books, setBooks] = useState<Book[]>([]);
   const inputRef = useRef(null);
@@ -49,7 +66,7 @@ const BookSearch = () => {
   };
   
   return (
-      <div>
+      <div className={classes.root}>
         <Head>
           <title>Book Search</title>
         </Head>
@@ -73,10 +90,14 @@ const BookSearch = () => {
             onChange={e => handleChange(e)}
           />
           <br/><br/>
-          <Button type="submit" variant="contained" color="primary">Search</Button>
+          <Button type="submit" className={classes.customButton} variant="contained" color="primary">Search</Button>
+          <Link href="/regist">
+            <Button type="button" className={classes.customButton} variant="contained" color="secondary">Regist</Button>
+          </Link>
         </form>
+        
         <hr/>
-        <SearchResults books={books} /> 
+        <SearchResults books={books} keywords={keywords}/> 
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import { StringDecoder } from "string_decoder";
 
-type Book = {
-  id?: string
+type BookRegist = {
   title: string
   description: string
   publisher: string
@@ -9,4 +8,4 @@ type Book = {
   image: string
 }
 
-export default Book;
+export default BookRegist;
